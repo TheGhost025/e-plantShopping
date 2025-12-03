@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './ProductList.css'
 import CartItem from './CartItem';
 import { addItem } from './CartSlice';
@@ -9,6 +9,7 @@ function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
     const [addedToCart, setAddedToCart] = useState({});
+    const cartItems = useSelector((state) => state.cart.items)
 
     const plantsArray = [
         {
@@ -266,6 +267,11 @@ function ProductList({ onHomeClick }) {
             [product.name]: true
         }));
     } 
+
+    const calculateTotalQuantity = () => {
+        return CartItems ? CartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+         };
+         
     return (
         <div>
             <div className="navbar" style={styleObj}>
@@ -321,8 +327,7 @@ function ProductList({ onHomeClick }) {
                         </div>
                     );
                 })}
-            </div>
-            
+            </div>            
             ) : (
                 <CartItem onContinueShopping={handleContinueShopping} />
             )}
